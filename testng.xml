@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Booking API Suite">
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+    <test name = "Booking API Tests">
+        <classes>
+            <class name="com.booking.TesNGBooking.CreateBookingTest"/>
+            <class name="com.booking.TesNGBooking.DeleteBookingTest"/>
+        </classes>
+    </test>
+</suite>
