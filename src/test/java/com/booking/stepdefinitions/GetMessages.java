@@ -2,6 +2,7 @@ package com.booking.stepdefinitions;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
@@ -13,8 +14,9 @@ public class GetMessages {
     @When("I want to read the messages")
     public void iWantToReadTheMessages() {
 
-        response = given().log().all()
-                        .when()
+        response = given()
+                        .contentType(ContentType.JSON)
+                   .when()
                         .get("https://automationintesting.online/api/message");
     }
 
