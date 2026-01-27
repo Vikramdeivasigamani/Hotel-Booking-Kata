@@ -15,7 +15,7 @@ public class GetMessages {
 
         response = given().log().all()
                         .when()
-                        .get("https://automationintesting.online/api/message");
+                        .get("/message");
     }
 
     @Then("I should receive all existing messages")
@@ -23,8 +23,8 @@ public class GetMessages {
         response.then().statusCode(200)
                 .body("messages.size()", greaterThan(0))
                 .body("messages.id", everyItem(notNullValue()))
-                .body("messages.name", everyItem(not(isEmptyOrNullString())))
-                .body("messages.subject", everyItem(not(isEmptyOrNullString())))
+                .body("messages.name", everyItem(not(emptyOrNullString())))
+                .body("messages.subject", everyItem(not(emptyOrNullString())))
                 .body("messages.read", everyItem(notNullValue()))
                 .log().all();
     }
