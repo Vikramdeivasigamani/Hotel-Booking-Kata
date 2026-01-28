@@ -19,7 +19,6 @@ public class BookingSteps {
         this.context = context;
         this.bookingApi = new BookingApi();
     }
-    private int bookingId;
     private Map<String, String> bookingData;
 
     @When("I create a new booking with the following details:")
@@ -47,8 +46,8 @@ public class BookingSteps {
                 .log().all()
                 .statusCode(201) //Bug: In Swagger it states  200, but api returns 201
                 .body("bookingid", notNullValue());
-        bookingId = context.response.jsonPath().getInt("bookingid");
-        context.bookingIds.add(bookingId);
+        context.bookingId = context.response.jsonPath().getInt("bookingid");
+        context.bookingIds.add(context.bookingId);
     }
 
     @When("I update the booking with the following details:")
@@ -67,7 +66,7 @@ public class BookingSteps {
                 "email", bookingData.get("email"),
                 "phone", bookingData.get("phone")
         );
-        context.response = bookingApi.updateBooking(bookingId, requestBody, context.token);
+        context.response = bookingApi.updateBooking(context.bookingId, requestBody, context.token);
     }
 
     @Then("the booking is updated successfully")
@@ -83,13 +82,6 @@ public class BookingSteps {
                 .body("email", equalTo(bookingData.get("email")))
                 .body("phone", equalTo(bookingData.get("phone")))*/;
         //bug: content should show updated booking details but instead returns "success": true
-    }
-    @And("I should get an error 409")
-    public void iShouldNotBeAbleToCreateAnotherBookingWithTheSameRoomidAndDate() {
-        context.response.then()
-                .log().all()
-                .statusCode(409)
-                .body("error", equalTo("Failed to create booking"));
     }
 
     @When("I partially update the booking with the following details:")
@@ -124,14 +116,10 @@ public class BookingSteps {
                 .body("phone", equalTo(bookingData.get("phone")))*/;
         //bug?: returns 405 Method Not Allowed
     }
+
     @Then("the details of the booking can be found using the booking id")
     public void theDetailsOfTheBookingCanBeFoundUsingTheBookingId() {
-        context.response = given()
-                .log().all()
-                .contentType("application/json")
-                .header("Cookie", "token=" + context.token)
-                .when()
-                .get("/booking/" + bookingId);
+        context.response = bookingApi.getBooking(context.bookingId, context.token);
 
         context.response.then()
                 .log().all()
@@ -145,22 +133,16 @@ public class BookingSteps {
                 //.body("phone", equalTo(bookingData.get("phone"))) -> bug: phone field not returned
         ;
     }
+
     @When("I delete the booking")
     public void iDeleteTheBooking() {
-        context.response = given()
-                .log().all()
-                .header("Cookie", "token=" + context.token)
-                .when()
-                .delete("/booking/" + bookingId);
+        context.response = bookingApi.deleteBooking(context.bookingId, context.token);
     }
+
     @When("I delete the booking {int}")
     public void iDeleteTheBookingString(int id) {
-        context.response = given()
-                .log().all()
-                .header("Cookie", "token=" + context.token)
-                .when()
-                .delete("/booking/" + id);
-        bookingId = id;
+        context.bookingId = id;
+        context.response = bookingApi.deleteBooking(id, context.token);
     }
 
     @Then("the booking is removed")
@@ -169,11 +151,7 @@ public class BookingSteps {
                 .statusCode(200)
                 .log().all();
 
-        context.response = given()
-                .log().all()
-                .header("Cookie", "token=" + context.token)
-                .when()
-                .get("/booking/" + bookingId);
+        context.response = bookingApi.getBooking(context.bookingId, context.token);
 
         context.response.then()
                 .log().all()

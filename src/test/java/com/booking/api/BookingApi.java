@@ -8,6 +8,14 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 
 public class BookingApi {
+    public Response getBooking(int id, String token) {
+        return given()
+                .log().all()
+                .contentType("application/json")
+                .header("Cookie", "token=" + token)
+                .when()
+                .get("/booking/" + id);
+    }
 
     public Response createBooking(Map<String, Object> body, String token) {
         return given()
