@@ -12,7 +12,7 @@ Feature: Authentication API
   Scenario Outline: Login with various invalid credential combinations
     Given I have a username "<username>" and password "<password>"
     When I send a login request
-    Then I should receive an error message "Invalid credentials"
+    Then I should receive a statuscode 401 with message "Invalid credentials"
     And the token should not be present in the response
 
     Examples:

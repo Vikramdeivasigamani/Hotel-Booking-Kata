@@ -1,19 +1,24 @@
 package com.booking.stepdefinitions;
 
 import java.util.Map;
+
+import com.booking.api.BookingApi;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class AuthenticationSteps {
-    private Response response;
     private String username;
     private String password;
-    public static String token;
+    private final ScenarioContext context;
+    private final BookingApi bookingApi;
+    public AuthenticationSteps(ScenarioContext context) {
+        this.context = context;
+        this.bookingApi = new BookingApi();
+    }
 
     @Given("I have a username {string} and password {string}")
     public void iHaveUsernameAndPassword(String username, String password) {
@@ -22,38 +27,30 @@ public class AuthenticationSteps {
     }
     @When("I send a login request")
     public void iSendALoginRequest() {
-        response = given()
-                .log().all()
-                .contentType("application/json")
-                .body(Map.of(
-                        "username", username,
-                        "password", password
-                ))
-                .when()
-                .post("/auth/login");
+        context.response = bookingApi.login(username, password);
     }
 
     @Then("I should receive an authentication token")
     public void iShouldReceiveAnAuthenticationToken() {
-        response.then()
+        context.response.then()
                 .statusCode(200)
                 .body("token", not(emptyOrNullString()))
                 .log().all();
 
-        token = response.jsonPath().getString("token");
+        context.token = context.response.jsonPath().getString("token");
     }
 
-    @Then("I should receive an error message {string}")
-    public void iShouldReceiveAnErrorMessage(String errorMessage) {
-        response.then()
-                .statusCode(401)
+    @Then("I should receive a statuscode {int} with message {string}")
+    public void iShouldReceiveAStatuscodeWithMessage(int statusCode, String errorMessage) {
+        context.response.then()
+                .statusCode(statusCode)
                 .body("error", equalTo(errorMessage))
                 .log().all();
     }
 
     @Then("the token should not be present in the response")
     public void theTokenShouldNotBePresentInTheResponse() {
-        response.then()
+        context.response.then()
                 .body("token", nullValue())
                 .statusCode(401)
                 .log().all();

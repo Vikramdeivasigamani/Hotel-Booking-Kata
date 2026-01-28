@@ -2,7 +2,7 @@
 @booking
 Feature: Booking management
 
-  Scenario: Create a booking successfully
+  Scenario: Create a booking and use the booking id to look it up
     Given I have a username "admin" and password "password"
     When I send a login request
     Then I should receive an authentication token
@@ -12,7 +12,7 @@ Feature: Booking management
     Then the booking is created successfully and returns a booking id
     Then the details of the booking can be found using the booking id
 
-  Scenario: Booking the same roomid twice on the same dates
+  Scenario: Book the same room id twice on the same dates
     Given I have a username "admin" and password "password"
     When I send a login request
     Then I should receive an authentication token
@@ -21,7 +21,10 @@ Feature: Booking management
       | 2       | John      | Doe       | true        | 2024-07-01 | 2024-07-10 | john.doe@example.com    | 123-456-7890 |
     Then the booking is created successfully and returns a booking id
     Then the details of the booking can be found using the booking id
-    And I should not be able to create another booking with the same roomid and date
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 2       | John      | Doe       | true        | 2024-07-01 | 2024-07-10 | john.doe@example.com    | 123-456-7890 |
+    Then I should receive a statuscode 409 with message "Failed to create booking"
 
   Scenario: Create a booking and update it completely
     Given I have a username "admin" and password "password"
