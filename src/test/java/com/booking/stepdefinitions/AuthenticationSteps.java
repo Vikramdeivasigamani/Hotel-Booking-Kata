@@ -33,9 +33,9 @@ public class AuthenticationSteps {
     @Then("I should receive an authentication token")
     public void iShouldReceiveAnAuthenticationToken() {
         context.response.then()
+                .log().all()
                 .statusCode(200)
-                .body("token", not(emptyOrNullString()))
-                .log().all();
+                .body("token", not(emptyOrNullString()));
 
         context.token = context.response.jsonPath().getString("token");
     }
@@ -43,16 +43,22 @@ public class AuthenticationSteps {
     @Then("I should receive a statuscode {int} with message {string}")
     public void iShouldReceiveAStatuscodeWithMessage(int statusCode, String errorMessage) {
         context.response.then()
+                .log().all()
                 .statusCode(statusCode)
-                .body("error", equalTo(errorMessage))
-                .log().all();
+                .body("error", equalTo(errorMessage));
     }
-
+    @Then("I should receive a statuscode {int}")
+    public void iShouldReceiveAStatuscode(int statusCode) {
+        context.response.then()
+                .log().all()
+                .statusCode(statusCode);
+    }
     @Then("the token should not be present in the response")
     public void theTokenShouldNotBePresentInTheResponse() {
         context.response.then()
+                .log().all()
                 .body("token", nullValue())
-                .statusCode(401)
-                .log().all();
+                .statusCode(401);
+
     }
 }

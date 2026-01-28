@@ -2,31 +2,120 @@
 @booking
 Feature: Booking management
 
-  Scenario: Create a booking and use the booking id to look it up
+  Scenario: Create a booking and retrieve it by booking ID
+    Given I have a username "admin" and password "password"
+    When I send a login request
+    Then I should receive an authentication token
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 1       | John      | Doe       | true        | 2026-07-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
+    Then the booking is created successfully and returns a booking id
+    Then the details of the booking can be found using the booking id
+
+  Scenario Outline: Reject booking when <field> is outside allowed range
+    Given I have a username "admin" and password "password"
+    When I send a login request
+    Then I should receive an authentication token
+    When I create a new booking with the following details:
+      | roomid | firstname   | lastname   | depositpaid | checkIn    | checkOut   | email            | phone   |
+      | 1      | <firstname> | <lastname> | true        | 2026-07-01 | 2026-07-10 | john@example.com | <phone> |
+    Then I should receive a statuscode 400
+    And the response contains the following errors:
+      | <error message> |
+
+    Examples:
+      | field     | firstname              | lastname               | phone                  | error message                |
+      | firstname | Al                     | Doe                    | 01234567890            | size must be between 3 and 18|
+      | firstname | AFirstNameOf19Chars    | Doe                    | 01234567890            | size must be between 3 and 18|
+      | lastname  | John                   | Ko                     | 01234567890            | size must be between 3 and 18|
+      | lastname  | John                   | ALastNameOf19Charss    | 01234567890            | size must be between 3 and 18|
+      | phone     | John                   | Doe                    | 0123456789             | size must be between 11 and 21|
+      | phone     | John                   | Doe                    | 0123456789012345678901 | size must be between 11 and 21|
+
+  Scenario Outline: Allow booking with minimum and maximum valid field lengths for firstname, lastname, and phone
+    Given I have a username "admin" and password "password"
+    When I send a login request
+    Then I should receive an authentication token
+    When I create a new booking with the following details:
+      | roomid | firstname | lastname | depositpaid | checkIn | checkOut | email | phone |
+      | 2 | <firstname> | <lastname> | true | 2026-07-01 | 2026-07-10 | john@example.com | <phone> |
+    Then the booking is created successfully and returns a booking id
+    Then the details of the booking can be found using the booking id
+
+    Examples:
+      |  firstname | lastname | phone |
+      | Ali | Kon | 01234567890 |
+      |  AFirstNameOf18Char | ALastNameOf18Chars | 012345678901234567890 |
+
+
+  Scenario: Fail booking when check-out date is before check-in date
+    Given I have a username "admin" and password "password"
+    When I send a login request
+    Then I should receive an authentication token
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 1       | John      | Doe       | true        | 2026-08-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
+    Then I should receive a statuscode 400
+    Then the response contains the following errors:
+      | Failed to create booking            |
+
+  Scenario Outline: Fail booking for invalid email formats
+    Given I have a username "admin" and password "password"
+    When I send a login request
+    Then I should receive an authentication token
+    When I create a new booking with the following details:
+      | roomid | firstname | lastname | depositpaid | checkIn | checkOut | email | phone |
+      | 1 | John | Doe | true | 2026-07-01 | 2026-07-10 | <email> | 123-456-7890 |
+    Then I should receive a statuscode 400
+    And the response contains the following errors:
+      | must be a well-formed email address |
+
+    Examples:
+      | email |
+      | john.doe.example.com |
+      | john.doe@ |
+      | @example.com |
+      | john..doe@example.com |
+      | john doe@example.com |
+
+  Scenario: Fail booking creation for past check-in dates
     Given I have a username "admin" and password "password"
     When I send a login request
     Then I should receive an authentication token
     When I create a new booking with the following details:
       | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
       | 1       | John      | Doe       | true        | 2024-07-01 | 2024-07-10 | john.doe@example.com    | 123-456-7890 |
-    Then the booking is created successfully and returns a booking id
-    Then the details of the booking can be found using the booking id
+    Then I should receive a statuscode 409 with message "Failed to create booking"
 
-  Scenario: Book the same room id twice on the same dates
+  Scenario: Fail double-booking of the same room on identical dates
     Given I have a username "admin" and password "password"
     When I send a login request
     Then I should receive an authentication token
     When I create a new booking with the following details:
       | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
-      | 2       | John      | Doe       | true        | 2024-07-01 | 2024-07-10 | john.doe@example.com    | 123-456-7890 |
+      | 2       | John      | Doe       | true        | 2026-07-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
     Then the booking is created successfully and returns a booking id
     Then the details of the booking can be found using the booking id
     When I create a new booking with the following details:
       | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
-      | 2       | John      | Doe       | true        | 2024-07-01 | 2024-07-10 | john.doe@example.com    | 123-456-7890 |
+      | 2       | John      | Doe       | true        | 2026-07-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
     Then I should receive a statuscode 409 with message "Failed to create booking"
 
-  Scenario: Create a booking and update it completely
+  Scenario: Fail double-booking of the same room on overlapping dates
+    Given I have a username "admin" and password "password"
+    When I send a login request
+    Then I should receive an authentication token
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 2       | John      | Doe       | true        | 2026-07-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
+    Then the booking is created successfully and returns a booking id
+    Then the details of the booking can be found using the booking id
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 2       | John      | Doe       | true        | 2026-07-09 | 2026-07-14 | john.doe@example.com    | 123-456-7890 |
+    Then I should receive a statuscode 409 with message "Failed to create booking"
+
+  Scenario: Update an existing booking with new details
     Given I have a username "admin" and password "password"
     When I send a login request
     Then I should receive an authentication token
@@ -41,7 +130,7 @@ Feature: Booking management
     Then the booking is updated successfully
     Then the details of the booking can be found using the booking id
 
-  Scenario: Create a booking and pay deposit
+  Scenario: Partially update booking to mark deposit as paid
     Given I have a username "admin" and password "password"
     When I send a login request
     Then I should receive an authentication token
@@ -53,3 +142,17 @@ Feature: Booking management
       | depositpaid | firstname |lastname |
       | true        | John      | Doe   |
     Then the booking is updated successfully
+
+  Scenario: Delete an existing booking
+    Given I have a username "admin" and password "password"
+    When I send a login request
+    Then I should receive an authentication token
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 5       | John      | Doe       | true        | 2026-07-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
+    Then the booking is created successfully and returns a booking id
+    Then the details of the booking can be found using the booking id
+    When I delete the booking
+    Then the booking is deleted successfully
+    When I try to find the booking using the booking id
+    Then I should receive a statuscode 404 with message "Failed to fetch booking: 404"

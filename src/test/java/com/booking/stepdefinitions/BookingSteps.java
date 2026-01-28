@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -145,7 +146,7 @@ public class BookingSteps {
         context.response = bookingApi.deleteBooking(id, context.token);
     }
 
-    @Then("the booking is removed")
+    @Then("the booking is deleted successfully")
     public void theBookingIsRemoved() {
         context.response.then()
                 .statusCode(200)
@@ -158,5 +159,19 @@ public class BookingSteps {
                 .body("error", equalTo("Failed to fetch booking: 404"))
                 .statusCode(404);
 
+    }
+
+    @When("I try to find the booking using the booking id")
+    public void iTryToFindTheBookingUsingTheBookingId() {
+        context.response = bookingApi.getBooking(context.bookingId, context.token);
+    }
+
+    @Then("the response contains the following errors:")
+    public void theResponseContainsTheFollowingErrors(DataTable table) {
+        List<String> expectedErrors = table.asList();
+
+        context.response.then()
+                .body("errors", hasSize(expectedErrors.size()))
+                .body("errors", hasItems(expectedErrors.toArray()));
     }
 }
