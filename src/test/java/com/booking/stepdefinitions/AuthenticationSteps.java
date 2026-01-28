@@ -13,7 +13,7 @@ public class AuthenticationSteps {
     private Response response;
     private String username;
     private String password;
-    private String token;
+    public static String token;
 
     @Given("I have a username {string} and password {string}")
     public void iHaveUsernameAndPassword(String username, String password) {
@@ -40,7 +40,7 @@ public class AuthenticationSteps {
                 .body("token", not(emptyOrNullString()))
                 .log().all();
 
-        //token = response.jsonPath().getString("token");
+        token = response.jsonPath().getString("token");
     }
 
     @Then("I should receive an error message {string}")
