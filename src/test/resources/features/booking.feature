@@ -146,8 +146,6 @@ Feature: Booking management
     When I try to fetch the booking with an invalid token
     Then I should receive a statuscode 401 with message "Authentication required"
 
-    """No auth needed for creating a booking?"""
-
   Scenario: Reject access to update booking without authentication
     When I create a new booking with the following details:
       | roomid | firstname | lastname | depositpaid | checkIn    | checkOut   | email                | phone        |
@@ -168,4 +166,42 @@ Feature: Booking management
     When I update the booking with an invaid token with the following details:
       | roomid | firstname | lastname | depositpaid | checkIn    | checkOut   | email                  | phone        |
       | 4      | Jane      | Smith    | false       | 2024-08-01 | 2024-08-15 | jane.smith@example.com | 098-765-4321 |
+    Then I should receive a statuscode 401 with message "Authentication required"
+
+  Scenario: Reject access to delete booking without authentication
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 5       | John      | Doe       | true        | 2026-07-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
+    Then the booking is created successfully and returns a booking id
+    Then the details of the booking can be found using the booking id
+    When I delete the booking without authentication
+    Then I should receive a statuscode 401 with message "Authentication required"
+
+  Scenario: Reject access to delete booking without valid token
+    When I create a new booking with the following details:
+      | roomid  | firstname | lastname  | depositpaid | checkIn    | checkOut   | email                   | phone        |
+      | 5       | John      | Doe       | true        | 2026-07-01 | 2026-07-10 | john.doe@example.com    | 123-456-7890 |
+    Then the booking is created successfully and returns a booking id
+    Then the details of the booking can be found using the booking id
+    When I delete the booking with an invalid token
+    Then I should receive a statuscode 401 with message "Authentication required"
+
+  Scenario: Reject access to partially update booking without authentication
+    When I create a new booking with the following details:
+      | roomid | firstname | lastname | depositpaid | checkIn    | checkOut   | email                | phone        |
+      | 3      | John      | Doe      | false        | 2026-07-01 | 2026-07-10 | john.doe@example.com | 123-456-7890 |
+    Then the booking is created successfully and returns a booking id
+    When I partially update the booking without authentication with the following details:
+      | depositpaid | firstname |lastname |
+      | true        | John      | Doe   |
+    Then I should receive a statuscode 401 with message "Authentication required"
+
+  Scenario: Reject access to partially update booking without valid token
+    When I create a new booking with the following details:
+      | roomid | firstname | lastname | depositpaid | checkIn    | checkOut   | email                | phone        |
+      | 3      | John      | Doe      | false        | 2026-07-01 | 2026-07-10 | john.doe@example.com | 123-456-7890 |
+    Then the booking is created successfully and returns a booking id
+    When I partially update the booking without a valid token with the following details:
+      | depositpaid | firstname |lastname |
+      | true        | John      | Doe   |
     Then I should receive a statuscode 401 with message "Authentication required"

@@ -117,6 +117,49 @@ public class BookingSteps {
                 .body("phone", equalTo(bookingData.get("phone")))*/;
         //bug?: returns 405 Method Not Allowed
     }
+    @When("I partially update the booking without authentication with the following details:")
+    public void iPartiallyUpdateTheBookingWithoutAuthWithTheFollowingDetails(DataTable dataTable) {
+        Map<String, String> patchData = dataTable.asMaps(String.class, String.class).get(0);
+
+        Map<String, Object> requestBody = new HashMap<>();
+
+        patchData.forEach((key, value) -> {
+            switch (key) {
+                case "depositpaid" -> {
+                    boolean boolVal = Boolean.parseBoolean(value);
+                    requestBody.put(key, boolVal);
+                    bookingData.put(key, value);
+                }
+                case "firstname", "lastname" -> {
+                    requestBody.put(key, value);
+                    bookingData.put(key, value);
+                }
+            }
+        });
+        context.response = bookingApi.patchBookingWithoutAuth(context.bookingId, requestBody);
+    }
+    @When("I partially update the booking without a valid token with the following details:")
+    public void iPartiallyUpdateTheBookingWithoutAValidTokenWithTheFollowingDetails(DataTable dataTable) {
+        Map<String, String> patchData = dataTable.asMaps(String.class, String.class).get(0);
+
+        Map<String, Object> requestBody = new HashMap<>();
+
+        patchData.forEach((key, value) -> {
+            switch (key) {
+                case "depositpaid" -> {
+                    boolean boolVal = Boolean.parseBoolean(value);
+                    requestBody.put(key, boolVal);
+                    bookingData.put(key, value);
+                }
+                case "firstname", "lastname" -> {
+                    requestBody.put(key, value);
+                    bookingData.put(key, value);
+                }
+            }
+        });
+        context.response = bookingApi.patchBooking(context.bookingId, requestBody, "Invalid token");
+
+    }
 
     @Then("the details of the booking can be found using the booking id")
     public void theDetailsOfTheBookingCanBeFoundUsingTheBookingId() {
@@ -138,6 +181,16 @@ public class BookingSteps {
     @When("I delete the booking")
     public void iDeleteTheBooking() {
         context.response = bookingApi.deleteBooking(context.bookingId, context.token);
+    }
+
+    @When("I delete the booking without authentication")
+    public void iDeleteTheBookingWithoutAuth() {
+        context.response = bookingApi.deleteBookingWithoutAuth(context.bookingId);
+    }
+
+    @When("I delete the booking with an invalid token")
+    public void iDeleteTheBookingWithInvalidToken() {
+        context.response = bookingApi.deleteBooking(context.bookingId, "InvalidToken");
     }
 
     @When("I delete the booking {int}")
@@ -174,7 +227,6 @@ public class BookingSteps {
                 .body("errors", hasSize(expectedErrors.size()))
                 .body("errors", hasItems(expectedErrors.toArray()));
     }
-
 
     @When("I try to fetch the booking without authentication")
     public void iTryToFetchWithoutAuth() {
