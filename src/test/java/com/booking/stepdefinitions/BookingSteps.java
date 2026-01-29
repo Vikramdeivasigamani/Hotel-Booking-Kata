@@ -163,7 +163,7 @@ public class BookingSteps {
 
     @When("I try to find the booking using the booking id")
     public void iTryToFindTheBookingUsingTheBookingId() {
-        context.response = bookingApi.getBooking(context.bookingId, context.token);
+        context.response = bookingApi.getBooking(context.bookingId, "");
     }
 
     @Then("the response contains the following errors:")
@@ -173,5 +173,54 @@ public class BookingSteps {
         context.response.then()
                 .body("errors", hasSize(expectedErrors.size()))
                 .body("errors", hasItems(expectedErrors.toArray()));
+    }
+
+
+    @When("I try to fetch the booking without authentication")
+    public void iTryToFetchWithoutAuth() {
+        context.response = bookingApi.getBookingByIdWithoutAuth(context.bookingId);
+    }
+
+    @When("I try to fetch the booking with an invalid token")
+    public void iTryToFetchWithInvalidToken() {
+        context.response = bookingApi.getBooking(context.bookingId, "Invalid token");
+    }
+
+    @When("I update the booking with an invaid token with the following details:")
+    public void iUpdateTheBookingWithAnInvaidTokenWithTheFollowingDetails(DataTable dataTable) {
+        bookingData = dataTable.asMaps().get(0);
+        Map<String, Object> bookingDates = Map.of(
+                "checkin", bookingData.get("checkIn"),
+                "checkout", bookingData.get("checkOut")
+        );
+        Map<String, Object> requestBody = Map.of(
+                "roomid", Integer.parseInt(bookingData.get("roomid")),
+                "firstname", bookingData.get("firstname"),
+                "lastname", bookingData.get("lastname"),
+                "depositpaid", Boolean.parseBoolean(bookingData.get("depositpaid")),
+                "bookingdates", bookingDates,
+                "email", bookingData.get("email"),
+                "phone", bookingData.get("phone")
+        );
+        context.response = bookingApi.updateBooking(context.bookingId, requestBody, "Invalid token");
+    }
+
+    @When("I update the booking without authentication with the following details:")
+    public void iUpdateTheBookingWithoutAuthenticationWithTheFollowingDetails(DataTable dataTable) {
+        bookingData = dataTable.asMaps().get(0);
+        Map<String, Object> bookingDates = Map.of(
+                "checkin", bookingData.get("checkIn"),
+                "checkout", bookingData.get("checkOut")
+        );
+        Map<String, Object> requestBody = Map.of(
+                "roomid", Integer.parseInt(bookingData.get("roomid")),
+                "firstname", bookingData.get("firstname"),
+                "lastname", bookingData.get("lastname"),
+                "depositpaid", Boolean.parseBoolean(bookingData.get("depositpaid")),
+                "bookingdates", bookingDates,
+                "email", bookingData.get("email"),
+                "phone", bookingData.get("phone")
+        );
+        context.response = bookingApi.updateBookingWithoutAuth(context.bookingId, requestBody);
     }
 }

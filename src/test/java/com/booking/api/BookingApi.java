@@ -17,6 +17,14 @@ public class BookingApi {
                 .get("/booking/" + id);
     }
 
+    public Response getBookingByIdWithoutAuth(int id) {
+        return given()
+                .log().all()
+                .contentType("application/json")
+                .when()
+                .get("/booking/" + id);
+    }
+
     public Response createBooking(Map<String, Object> body, String token) {
         return given()
                 .log().all()
@@ -36,6 +44,16 @@ public class BookingApi {
                 .when()
                 .put("/booking/" + id);
     }
+
+    public Response updateBookingWithoutAuth(int id, Map<String, Object> body) {
+        return given()
+                .log().all()
+                .contentType("application/json")
+                .body(body)
+                .when()
+                .put("/booking/" + id);
+    }
+
 
     public Response patchBooking(int id, Map<String, Object> body, String token) {
         return given()
