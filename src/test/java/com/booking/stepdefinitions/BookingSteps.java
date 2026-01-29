@@ -21,12 +21,11 @@ public class BookingSteps {
         this.context = context;
         this.bookingApi = new BookingApi();
     }
-    private Map<String, String> bookingData;
 
     @When("I create a new booking with the following details:")
     public void iCreateANewBookingWithTheFollowingDetails(DataTable dataTable) {
         BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
-        bookingData = builder.raw();
+        context.bookingData = builder.raw();
         context.response = bookingApi.createBooking(builder.requestBody(), context.token);
     }
 
@@ -43,7 +42,7 @@ public class BookingSteps {
     @When("I update the booking with the following details:")
     public void iUpdateTheBookingWithTheFollowingDetails(DataTable dataTable) {
         BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
-        bookingData = builder.raw();
+        context.bookingData = builder.raw();
         context.response = bookingApi.updateBooking(context.bookingId, builder.requestBody(), context.token);
     }
 
@@ -73,11 +72,11 @@ public class BookingSteps {
                 case "depositpaid" -> {
                     boolean boolVal = Boolean.parseBoolean(value);
                     requestBody.put(key, boolVal);
-                    bookingData.put(key, value);
+                    context.bookingData.put(key, value);
                 }
                 case "firstname", "lastname" -> {
                     requestBody.put(key, value);
-                    bookingData.put(key, value);
+                    context.bookingData.put(key, value);
                 }
             }
         });
@@ -105,11 +104,11 @@ public class BookingSteps {
                 case "depositpaid" -> {
                     boolean boolVal = Boolean.parseBoolean(value);
                     requestBody.put(key, boolVal);
-                    bookingData.put(key, value);
+                    context.bookingData.put(key, value);
                 }
                 case "firstname", "lastname" -> {
                     requestBody.put(key, value);
-                    bookingData.put(key, value);
+                    context.bookingData.put(key, value);
                 }
             }
         });
@@ -126,11 +125,11 @@ public class BookingSteps {
                 case "depositpaid" -> {
                     boolean boolVal = Boolean.parseBoolean(value);
                     requestBody.put(key, boolVal);
-                    bookingData.put(key, value);
+                    context.bookingData.put(key, value);
                 }
                 case "firstname", "lastname" -> {
                     requestBody.put(key, value);
-                    bookingData.put(key, value);
+                    context.bookingData.put(key, value);
                 }
             }
         });
@@ -145,13 +144,13 @@ public class BookingSteps {
         context.response.then()
                 .log().all()
                 .statusCode(200)
-                .body("firstname", equalTo(bookingData.get("firstname")))
-                .body("lastname", equalTo(bookingData.get("lastname")))
-                .body("depositpaid", equalTo(Boolean.parseBoolean(bookingData.get("depositpaid"))))
-                .body("bookingdates.checkin", equalTo(bookingData.get("checkIn")))
-                .body("bookingdates.checkout", equalTo(bookingData.get("checkOut")))
-                //.body("email", equalTo(bookingData.get("email"))) -> bug: email field not returned
-                //.body("phone", equalTo(bookingData.get("phone"))) -> bug: phone field not returned
+                .body("firstname", equalTo(context.bookingData.get("firstname")))
+                .body("lastname", equalTo(context.bookingData.get("lastname")))
+                .body("depositpaid", equalTo(Boolean.parseBoolean(context.bookingData.get("depositpaid"))))
+                .body("bookingdates.checkin", equalTo(context.bookingData.get("checkIn")))
+                .body("bookingdates.checkout", equalTo(context.bookingData.get("checkOut")))
+                //.body("email", equalTo(context.bookingData.get("email"))) -> bug: email field not returned
+                //.body("phone", equalTo(context.bookingData.get("phone"))) -> bug: phone field not returned
         ;
     }
 
@@ -218,14 +217,14 @@ public class BookingSteps {
     @When("I update the booking with an invaid token with the following details:")
     public void iUpdateTheBookingWithAnInvaidTokenWithTheFollowingDetails(DataTable dataTable) {
         BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
-        bookingData = builder.raw();
+        context.bookingData = builder.raw();
         context.response = bookingApi.updateBooking(context.bookingId, builder.requestBody(), "Invalid token");
     }
 
     @When("I update the booking without authentication with the following details:")
     public void iUpdateTheBookingWithoutAuthenticationWithTheFollowingDetails(DataTable dataTable) {
         BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
-        bookingData = builder.raw();
+        context.bookingData = builder.raw();
         context.response = bookingApi.updateBookingWithoutAuth(context.bookingId, builder.requestBody());
     }
 }
