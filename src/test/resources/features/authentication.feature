@@ -1,15 +1,17 @@
-@authentication
+@authentication @security
 Feature: Authentication API
   As a user of the booking API
   I want to authenticate with valid credentials
   So that I can access protected endpoints
 
+  @happy-path @login
   Scenario: Successful login with valid credentials
     Given I have a username "admin" and password "password"
     When I send a login request
     Then I should receive an authentication token
 
-  Scenario Outline: Login with various invalid credential combinations
+  @negative @login @security
+  Scenario Outline: Prevent login with various invalid credential combinations
     Given I have a username "<username>" and password "<password>"
     When I send a login request
     Then I should receive a statuscode 401 with message "Invalid credentials"
@@ -18,6 +20,6 @@ Feature: Authentication API
     Examples:
       | username  | password      |
       |           | password      |
-      | admin     | wrongpass     |
-      | wronguser | password      |
+      | admin     |               |
+      |           |               |
       | wronguser | wrongpass     |

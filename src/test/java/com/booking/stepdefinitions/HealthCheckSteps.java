@@ -20,8 +20,9 @@ public class HealthCheckSteps {
     @Then("the API should respond with status UP")
     public void theAPIShouldRespondWithStatusUP() {
         response.then()
+                .log().all()
                 .statusCode(200)
-                .body("status", equalTo("UP"))
-                .log().all();
+                .body("status", equalTo("UP"));
+
         }
     }

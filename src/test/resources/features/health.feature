@@ -1,4 +1,4 @@
-@message
+@health
 
 Feature: API Health Check
     Scenario: API is up

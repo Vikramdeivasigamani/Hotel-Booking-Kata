@@ -1,6 +1,7 @@
 package com.booking.stepdefinitions;
 
 import com.booking.api.BookingApi;
+import com.booking.testdata.BookingRequestBuilder;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
@@ -24,21 +25,9 @@ public class BookingSteps {
 
     @When("I create a new booking with the following details:")
     public void iCreateANewBookingWithTheFollowingDetails(DataTable dataTable) {
-        bookingData = new HashMap<>(dataTable.asMaps(String.class, String.class).get(0));
-        Map<String, Object> bookingDates = Map.of(
-                "checkin", bookingData.get("checkIn"),
-                "checkout", bookingData.get("checkOut")
-        );
-        Map<String, Object> requestBody = Map.of(
-                "roomid", Integer.parseInt(bookingData.get("roomid")),
-                "firstname", bookingData.get("firstname"),
-                "lastname", bookingData.get("lastname"),
-                "depositpaid", Boolean.parseBoolean(bookingData.get("depositpaid")),
-                "bookingdates", bookingDates,
-                "email", bookingData.get("email"),
-                "phone", bookingData.get("phone")
-        );
-        context.response = bookingApi.createBooking(requestBody, context.token);
+        BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
+        bookingData = builder.raw();
+        context.response = bookingApi.createBooking(builder.requestBody(), context.token);
     }
 
     @Then("the booking is created successfully and returns a booking id")
@@ -53,21 +42,9 @@ public class BookingSteps {
 
     @When("I update the booking with the following details:")
     public void iUpdateTheBookingWithTheFollowingDetails(DataTable dataTable) {
-        bookingData = dataTable.asMaps().get(0);
-        Map<String, Object> bookingDates = Map.of(
-                "checkin", bookingData.get("checkIn"),
-                "checkout", bookingData.get("checkOut")
-        );
-        Map<String, Object> requestBody = Map.of(
-                "roomid", Integer.parseInt(bookingData.get("roomid")),
-                "firstname", bookingData.get("firstname"),
-                "lastname", bookingData.get("lastname"),
-                "depositpaid", Boolean.parseBoolean(bookingData.get("depositpaid")),
-                "bookingdates", bookingDates,
-                "email", bookingData.get("email"),
-                "phone", bookingData.get("phone")
-        );
-        context.response = bookingApi.updateBooking(context.bookingId, requestBody, context.token);
+        BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
+        bookingData = builder.raw();
+        context.response = bookingApi.updateBooking(context.bookingId, builder.requestBody(), context.token);
     }
 
     @Then("the booking is updated successfully")
@@ -240,39 +217,15 @@ public class BookingSteps {
 
     @When("I update the booking with an invaid token with the following details:")
     public void iUpdateTheBookingWithAnInvaidTokenWithTheFollowingDetails(DataTable dataTable) {
-        bookingData = dataTable.asMaps().get(0);
-        Map<String, Object> bookingDates = Map.of(
-                "checkin", bookingData.get("checkIn"),
-                "checkout", bookingData.get("checkOut")
-        );
-        Map<String, Object> requestBody = Map.of(
-                "roomid", Integer.parseInt(bookingData.get("roomid")),
-                "firstname", bookingData.get("firstname"),
-                "lastname", bookingData.get("lastname"),
-                "depositpaid", Boolean.parseBoolean(bookingData.get("depositpaid")),
-                "bookingdates", bookingDates,
-                "email", bookingData.get("email"),
-                "phone", bookingData.get("phone")
-        );
-        context.response = bookingApi.updateBooking(context.bookingId, requestBody, "Invalid token");
+        BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
+        bookingData = builder.raw();
+        context.response = bookingApi.updateBooking(context.bookingId, builder.requestBody(), "Invalid token");
     }
 
     @When("I update the booking without authentication with the following details:")
     public void iUpdateTheBookingWithoutAuthenticationWithTheFollowingDetails(DataTable dataTable) {
-        bookingData = dataTable.asMaps().get(0);
-        Map<String, Object> bookingDates = Map.of(
-                "checkin", bookingData.get("checkIn"),
-                "checkout", bookingData.get("checkOut")
-        );
-        Map<String, Object> requestBody = Map.of(
-                "roomid", Integer.parseInt(bookingData.get("roomid")),
-                "firstname", bookingData.get("firstname"),
-                "lastname", bookingData.get("lastname"),
-                "depositpaid", Boolean.parseBoolean(bookingData.get("depositpaid")),
-                "bookingdates", bookingDates,
-                "email", bookingData.get("email"),
-                "phone", bookingData.get("phone")
-        );
-        context.response = bookingApi.updateBookingWithoutAuth(context.bookingId, requestBody);
+        BookingRequestBuilder builder = BookingRequestBuilder.from(dataTable);
+        bookingData = builder.raw();
+        context.response = bookingApi.updateBookingWithoutAuth(context.bookingId, builder.requestBody());
     }
 }

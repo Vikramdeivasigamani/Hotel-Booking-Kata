@@ -29,7 +29,6 @@ public class BookingApi {
         return given()
                 .log().all()
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + token)
                 .body(body)
                 .when()
                 .post("/booking");
