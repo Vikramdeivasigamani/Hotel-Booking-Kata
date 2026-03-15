@@ -9,8 +9,7 @@ Given the hotel booking system is available
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>|<checkin>  | <checkout> |
   When the guest submits the booking
   Then the booking is created successfully
-  And the sytems confirms the booking
-  And a unique booking reference ID is returned
+  And a unique room id is generated
   
 Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |
