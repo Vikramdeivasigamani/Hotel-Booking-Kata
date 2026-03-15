@@ -17,8 +17,8 @@ Feature: Create hotel booking
     | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
-  Then the booking is created successfully
-  And an unique reservation id is generated
+  Then the response status should be 200
+  And an unique booking id is generated
   
 Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |
@@ -34,7 +34,7 @@ Examples:
     | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
-  Then the booking request is rejected
+  Then the response status should be 400
   And the response displays an error message "<errormessage>"
   
   
@@ -42,13 +42,13 @@ Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                             |
   | Wi        | Smith      | will@test.com | 9677121121907 | true         | 2026-03-15 | 2026-03-20 | firstname size must be between 3 and 18 | 
   
-  Scenario Outline: Unsuccessful booking of a hotel room when the last name is invalid
+   Scenario Outline: Unsuccessful booking of a hotel room when the last name is invalid
   
   Given a guest provides the following booking details:  
   | firstname   | lastname   | email     | phone   | depositpaid    | checkin   | checkout   |
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
-  Then the booking request is rejected
+  Then the response status should be 400
   And the response displays an error message "<errormessage>"
   
   
@@ -56,13 +56,13 @@ Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                             |
   | Will      | Sm         | will@test.com | 9677121121907 | true         | 2026-03-15 | 2026-03-20 | lastname size must be between 3 and 18  |
   
-  Scenario Outline: Unsuccessful booking of a hotel room when the phone number is invalid 
+     Scenario Outline: Unsuccessful booking of a hotel room when the phone number is invalid 
   
   Given a guest provides the following booking details:  
     | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
-  Then the booking request is rejected
+  Then the response status should be 400
   And the response displays an error message "<errormessage>"
   
   
@@ -70,13 +70,13 @@ Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                                 |
   | Will      | Smith      | will@test.com | 9677121907    | true         | 2026-03-15 | 2026-03-20 | phonenumber size must be between 11 and 21  |
   
-   Scenario Outline: Unsuccessful booking of a hotel room when the email address is invalid 
+       Scenario Outline: Unsuccessful booking of a hotel room when the email address is invalid 
   
   Given a guest provides the following booking details:  
     | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
-  Then the booking request is rejected
+  Then the response status should be 400
   And the response displays an error message "<errormessage>"
   
   
@@ -85,13 +85,13 @@ Examples:
   | Will      | Smith      | @test.com     | 9677121121907    | true         | 2026-03-15 | 2026-03-20 |email must be a well-formed email address  |
   
   
-   Scenario Outline: Unsuccessful booking of a hotel room when the stay dates are invalid 
+      Scenario Outline: Unsuccessful booking of a hotel room when the stay dates are invalid 
   
   Given a guest provides the following booking details:  
     | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
-  Then the booking request is rejected
+  Then the response status should be 400
   And the response displays an error message "<errormessage>"
   
   
@@ -108,7 +108,7 @@ Examples:
       | <firstname> | <lastname> | <email> | <phone> | <depositpaid> | <checkin> | <checkout> |
 
     When the guest submits the booking
-    Then the booking request is rejected
+    Then the response status should be 400
     And the response displays an error message "<errormessage>"
     
 
@@ -119,9 +119,11 @@ Examples:
     | Will     | Smith    | @test.com     | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | email must be a well-formed email address     |
     | Will     | Smith    | will@test.com | 9677121907    | true        | 2026-03-15 | 2026-03-20 | phonenumber size must be between 11 and 21    |
     | Will     | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-15 | checkin and checkout date cannot be the same  |
-    | Sam      | Mendis   | sam@test.com  | 9677121121908 | true        | 2026-03-21 | 2026-03-20 | Failed to create booking                 |
+    | Sam      | Mendis   | sam@test.com  | 9677121121908 | true        | 2026-03-21 | 2026-03-20 | Failed to create booking                      |
   
- 
+   
   
+  
+    
     
     
