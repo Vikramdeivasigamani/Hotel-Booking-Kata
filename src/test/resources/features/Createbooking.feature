@@ -1,34 +1,127 @@
-Given the hotel booking system is available
+
+Feature: Create hotel booking
+
+  As a customer
+  I want to book a hotel room
+  So that my stay can be confirmed by the hotel reservation system
+
+ Background:
+ 
+  Given the hotel booking system is available
 
  # Positive Scenarios
  
   Scenario Outline: Successful booking of a hotel room with valid guest and stay details
   
   Given a guest provides the following booking details:  
-    | firstname   | lastname   | email   | phone   | depositpaid  | checkin   | checkout   |
-    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>|<checkin>  | <checkout> |
+    | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
+    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
   Then the booking is created successfully
-  And a unique room id is generated
+  And an unique reservation id is generated
   
 Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |
   | Will      | Smith      | will@test.com | 9677121121907 | true         | 2026-03-15 | 2026-03-20 |
   | Sam       | Mendis     | sam@test.com  | 9677121121908 | false        | 2026-03-17 | 2026-03-20 |
-
+  
+  
   # Negative Scenarios
   
-  Scenario Outline: Unsuccessful booking of a hotel room due to invalid first name
+  Scenario Outline: Unsuccessful booking of a hotel room when the first name is invalid
   
   Given a guest provides the following booking details:  
-    | firstname   | lastname   | email   | phone   | depositpaid  | checkin   | checkout   |
-    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>|<checkin>  | <checkout> |
+    | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
+    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
   When the guest submits the booking
   Then the booking request is rejected
-  And the system displays the error message "<errormessage>"
-  And the system should not confirm the booking
+  And the response displays an error message "<errormessage>"
+  
   
   Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                             |
   | Wi        | Smith      | will@test.com | 9677121121907 | true         | 2026-03-15 | 2026-03-20 | firstname size must be between 3 and 18 | 
   
+  Scenario Outline: Unsuccessful booking of a hotel room when the last name is invalid
+  
+  Given a guest provides the following booking details:  
+  | firstname   | lastname   | email     | phone   | depositpaid    | checkin   | checkout   |
+    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
+  When the guest submits the booking
+  Then the booking request is rejected
+  And the response displays an error message "<errormessage>"
+  
+  
+  Examples:
+  | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                             |
+  | Will      | Sm         | will@test.com | 9677121121907 | true         | 2026-03-15 | 2026-03-20 | lastname size must be between 3 and 18  |
+  
+  Scenario Outline: Unsuccessful booking of a hotel room when the phone number is invalid 
+  
+  Given a guest provides the following booking details:  
+    | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
+    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
+  When the guest submits the booking
+  Then the booking request is rejected
+  And the response displays an error message "<errormessage>"
+  
+  
+  Examples:
+  | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                                 |
+  | Will      | Smith      | will@test.com | 9677121907    | true         | 2026-03-15 | 2026-03-20 | phonenumber size must be between 11 and 21  |
+  
+   Scenario Outline: Unsuccessful booking of a hotel room when the email address is invalid 
+  
+  Given a guest provides the following booking details:  
+    | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
+    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
+  When the guest submits the booking
+  Then the booking request is rejected
+  And the response displays an error message "<errormessage>"
+  
+  
+  Examples:
+  | firstname | lastname   | email         | phone            | depositpaid  | checkin    | checkout   |errormessage                               |
+  | Will      | Smith      | @test.com     | 9677121121907    | true         | 2026-03-15 | 2026-03-20 |email must be a well-formed email address  |
+  
+  
+   Scenario Outline: Unsuccessful booking of a hotel room when the stay dates are invalid 
+  
+  Given a guest provides the following booking details:  
+    | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
+    | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
+  When the guest submits the booking
+  Then the booking request is rejected
+  And the response displays an error message "<errormessage>"
+  
+  
+  Examples:
+  | firstname | lastname   | email         | phone            | depositpaid  | checkin    | checkout   |errormessage                                 |
+  | Will      | Smith      | @test.com     | 9677121121907    | true         | 2026-03-15 | 2026-03-15 |checkin and checkout date cannot be the same |
+  | Sam       | Mendis     | sam@test.com  | 9677121121908    | true         | 2026-03-21 | 2026-03-20 |Failed to create booking                     |
+  
+  
+  Scenario Outline: Unsuccessful booking of a hotel room due to invalid booking details
+
+    Given a guest provides the following booking details
+      | firstname   | lastname   | email   | phone   | depositpaid   | checkin   | checkout   |
+      | <firstname> | <lastname> | <email> | <phone> | <depositpaid> | <checkin> | <checkout> |
+
+    When the guest submits the booking
+    Then the booking request is rejected
+    And the response displays an error message "<errormessage>"
+    
+
+  Examples:
+    | firstname | lastname | email         | phone        | depositpaid | checkin    | checkout   | errormessage                                 |
+    | Wi       | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | firstname size must be between 3 and 18       |
+    | Will     | Sm       | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | lastname size must be between 3 and 18        |
+    | Will     | Smith    | @test.com     | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | email must be a well-formed email address     |
+    | Will     | Smith    | will@test.com | 9677121907    | true        | 2026-03-15 | 2026-03-20 | phonenumber size must be between 11 and 21    |
+    | Will     | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-15 | checkin and checkout date cannot be the same  |
+    | Sam      | Mendis   | sam@test.com  | 9677121121908 | true        | 2026-03-21 | 2026-03-20 | Failed to create booking                 |
+  
+ 
+  
+    
+    
