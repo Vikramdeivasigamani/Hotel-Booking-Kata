@@ -1,4 +1,4 @@
-
+@booking @api @createbooking
 Feature: Create hotel booking
 
   As a customer
@@ -9,8 +9,8 @@ Feature: Create hotel booking
  
   Given the hotel booking system is available
 
- # Positive Scenarios
- 
+@positive @validation
+
   Scenario Outline: Successful booking of a hotel room with valid guest and stay details
   
   Given a guest provides the following booking details:  
@@ -26,7 +26,7 @@ Examples:
   | Sam       | Mendis     | sam@test.com  | 9677121121908 | false        | 2026-03-17 | 2026-03-20 |
   
   
-  # Negative Scenarios
+   @negative @validation
   
   Scenario Outline: Unsuccessful booking of a hotel room when the first name is invalid
   
@@ -42,6 +42,8 @@ Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                             |
   | Wi        | Smith      | will@test.com | 9677121121907 | true         | 2026-03-15 | 2026-03-20 | firstname size must be between 3 and 18 | 
   
+   @negative @validation
+   
    Scenario Outline: Unsuccessful booking of a hotel room when the last name is invalid
   
   Given a guest provides the following booking details:  
@@ -56,6 +58,8 @@ Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                             |
   | Will      | Sm         | will@test.com | 9677121121907 | true         | 2026-03-15 | 2026-03-20 | lastname size must be between 3 and 18  |
   
+   @negative @validation
+   
      Scenario Outline: Unsuccessful booking of a hotel room when the phone number is invalid 
   
   Given a guest provides the following booking details:  
@@ -70,6 +74,8 @@ Examples:
   | firstname | lastname   | email         | phone         | depositpaid  | checkin    | checkout   |errormessage                                 |
   | Will      | Smith      | will@test.com | 9677121907    | true         | 2026-03-15 | 2026-03-20 | phonenumber size must be between 11 and 21  |
   
+   @negative @validation
+   
        Scenario Outline: Unsuccessful booking of a hotel room when the email address is invalid 
   
   Given a guest provides the following booking details:  
@@ -84,7 +90,8 @@ Examples:
   | firstname | lastname   | email         | phone            | depositpaid  | checkin    | checkout   |errormessage                               |
   | Will      | Smith      | @test.com     | 9677121121907    | true         | 2026-03-15 | 2026-03-20 |email must be a well-formed email address  |
   
-  
+   @negative @validation
+   
       Scenario Outline: Unsuccessful booking of a hotel room when the stay dates are invalid 
   
   Given a guest provides the following booking details:  
@@ -100,7 +107,8 @@ Examples:
   | Will      | Smith      | @test.com     | 9677121121907    | true         | 2026-03-15 | 2026-03-15 |checkin and checkout date cannot be the same |
   | Sam       | Mendis     | sam@test.com  | 9677121121908    | true         | 2026-03-21 | 2026-03-20 |Failed to create booking                     |
   
-  
+   @negative @validation
+   
   Scenario Outline: Unsuccessful booking of a hotel room due to invalid booking details
 
     Given a guest provides the following booking details
