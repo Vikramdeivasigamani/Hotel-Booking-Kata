@@ -1,4 +1,3 @@
-@booking @api @createbooking
 Feature: Create hotel booking
 
   As a customer
@@ -25,7 +24,7 @@ Examples:
   | Sam       | Mendis     | sam@test.com  | 9677121121908 | false        | 2026-03-17 | 2026-03-20 |
   
   
-   @negative @validation @error @mandatory
+   @negative @validation @error @invalidParam
      
   Scenario Outline: Unsuccessful booking of a hotel room due to invalid booking details
 
@@ -37,7 +36,7 @@ Examples:
     And booking id should not be generated
    
     Examples:
-    | firstname | lastname | email         | phone        | depositpaid | checkin    | checkout   | errormessage                                 |
+    | firstname | lastname | email         | phone        | depositpaid | checkin    | checkout   | errormessage                                  |
     | Wi       | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | firstname size must be between 3 and 18       |
     | Will     | Sm       | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | lastname size must be between 3 and 18        |
     | Will     | Smith    | @test.com     | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | email must be a well-formed email address     |
@@ -45,4 +44,4 @@ Examples:
     | Will     | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-15 | checkin and checkout date cannot be the same  |
     | Sam      | Mendis   | sam@test.com  | 9677121121908 | true        | 2026-03-21 | 2026-03-20 | Failed to create booking                      |
   
-   
+       
