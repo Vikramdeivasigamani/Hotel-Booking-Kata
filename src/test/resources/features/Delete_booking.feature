@@ -22,7 +22,7 @@ Feature: Cancel booking
        | 201       | xyz456token  |
    
    
-   @delete @negative @validation @error
+   @delete @negative @validation @error @validation
    
    Scenario Outline: Unsuccessful cancellation due to invalid booking id
    
@@ -53,7 +53,7 @@ Feature: Cancel booking
        | 301       |              | unauthorized    |
        
               
-     @delete @negative @error 
+    @delete @negative @validation @error @validation
         
    Scenario Outline: Unsuccessful cancellation of an already cancelled booking 
    
@@ -67,7 +67,7 @@ Feature: Cancel booking
        | bookingid | token        | errormessage         |  
        | 101       | abc123token  | booking not found    |
        
-    @delete @negative @error
+    @delete @negative @validation @error @validation
     
     Scenario Outline: Unsuccessful cancellation of an booking after check-in date 
     
@@ -84,7 +84,7 @@ Feature: Cancel booking
        | 101       | abc123token  | unauthorized         |
      
      
-        @delete @negative @error 
+       @delete @negative @validation @error @validation
     
     Scenario Outline: Unsuccessful cancellation of an expired booking  
     
@@ -98,7 +98,6 @@ Feature: Cancel booking
     
        | bookingid | token        | errormessage         |  
        | 101       | abc123token  | unauthorized         |
-       
-                 
+                    
       
      
