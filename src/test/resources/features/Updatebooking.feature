@@ -5,14 +5,12 @@
   I want to update my booking details
   So that I can modify my booking information 
 
-  Background:
-    Given a confirmed booking already exists 
-
      @positive @update @mandatory
 
      Scenario Outline: Successfully update the customer's booking details
   
-    When the customer updates the booking details with the following details  using booking id "<bookingid>" and token code "<token>"  
+    Given a confirmed booking already exists 
+    When the customer updates the booking details using booking id "<bookingid>" and token code "<token>"  
      | firstname   | lastname    | phone      | email       | checkin    | checkout   | depositpaid   |
      | <firstname> | <lastname>  | <phone>    | <email>     | <checkin>  | <checkout> | <depositpaid> | 
     Then the response status code should be 200
@@ -26,7 +24,7 @@
        
      @negative @update @error
       Scenario Outline: Unsuccessful update of existing booking due to invalid booking id
-  
+    Given a confirmed booking already exists 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
@@ -37,7 +35,7 @@
        | !@#       | abc123token  | unauthorized    |
        | xyz       | xyz456token  | unauthorized    |
        
-        Scenario Outline: Unsuccessful update of existing booking due to cancelled booking id
+     Scenario Outline: Unsuccessful update of existing booking due to cancelled booking id
         
     Given the booking is already cancelled 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
@@ -51,8 +49,10 @@
        | 222       | xyz456token  | unauthorized    |
     
     @negative @update  @error 
-       Scenario Outline: Unsuccessful update of existing booking due to invalid token code
+    
+    Scenario Outline: Unsuccessful update of existing booking due to invalid token code
   
+    Given a confirmed booking already exists 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
@@ -66,6 +66,7 @@
     @negative @update @error
       Scenario Outline: Unsuccessful update of existing booking due to expired token code
   
+    Given a confirmed booking already exists 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
@@ -77,8 +78,10 @@
        | 201       | 123456token  | unauthorized    |
        
      @negative @update @mandatory @error
-      Scenario Outline: Unsuccessful update of customer's booking details due to invalid inputs
+     
+    Scenario Outline: Unsuccessful update of customer's booking details due to invalid inputs
   
+    Given a confirmed booking already exists 
     When the customer updates the booking details with the following details using booking id "<bookingid>" and token code "<token>"  
      | firstname   | lastname    | phone      | email       | checkin    | checkout   |
      | <firstname> | <lastname>  | <phone>    | <email>     | <checkin>  | <checkout> |
