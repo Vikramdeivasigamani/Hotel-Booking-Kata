@@ -1,4 +1,4 @@
- @update @booking
+ @update 
   Feature: Update an existing booking
 
   As a customer
@@ -22,7 +22,7 @@
        | 101       | abc123token  | Rahul      | Bose      | 9677121121901  | rahul@email.com  | 2026-03-15   | 2026-03-20 | true         |
        | 201       | xyz456token  | Bijoy      | Nambiar   | 9677121121902  | bijoy@email.com  | 2026-03-20   | 2026-03-25 | false        |
        
-    @negative @update @error
+    @negative @update @error @validation
      
     Scenario Outline: Unsuccessful update of existing booking due to invalid booking id
     Given a confirmed booking already exists 
@@ -36,7 +36,7 @@
        | !@#       | abc123token  | unauthorized    |
        | xyz       | xyz456token  | unauthorized    |
 
-    @negative @update  @error 
+  @negative @update @error @validation
     
     Scenario Outline: Unsuccessful update of existing booking due to cancelled booking id
         
@@ -51,7 +51,7 @@
        | 111       | abc123token  | unauthorized    |
        | 222       | xyz456token  | unauthorized    |
     
-    @negative @update  @error 
+   @negative @update @error @validation
     
     Scenario Outline: Unsuccessful update of existing booking due to invalid token code
   
@@ -66,7 +66,7 @@
        | 101       | !@#123token  | unauthorized    |
        | 201       | 123456token  | unauthorized    |
     
-    @negative @update @error
+    @negative @update @error @validation
     
     Scenario Outline: Unsuccessful update of existing booking due to expired token code
   
@@ -81,7 +81,7 @@
        | 101       | !@#123token  | unauthorized    |
        | 201       | 123456token  | unauthorized    |
        
-     @negative @update  @invalidParam @error
+     @negative @update @error @invalidParam
      
     Scenario Outline: Unsuccessful update of customer's booking details due to invalid inputs
   
