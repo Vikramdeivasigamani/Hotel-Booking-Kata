@@ -25,7 +25,7 @@ Feature: Retrieve existing booking details
    Scenario Outline: Unsuccessful retrieval of booking details due to invalid booking id but valid token
     
            
-  When the client enter the booking reference "<bookingid>" "<token>"
+  When the customer enter the booking reference "<bookingid>" "<token>"
   Then the response status should be 401
   And the response displays an error message "<errormessage>"
   
@@ -40,7 +40,7 @@ Feature: Retrieve existing booking details
    Scenario Outline: Unsuccessful retrieval of booking details due to valid booking id but invalid token
     
            
-  When the client enter the booking reference "<bookingid>" "<token>"
+  When the customer enter the booking reference "<bookingid>" "<token>"
   Then the response status should be 401
   And the response displays an error message "<errormessage>"
   
@@ -56,13 +56,15 @@ Feature: Retrieve existing booking details
    Scenario Outline: Unsuccessful retrieval of booking details due to valid booking id but missing token
     
            
-  When the client enter the booking reference "<bookingid>" "<token>"
+  When the customer enter the booking reference "<bookingid>" "<token>"
   Then the response status should be 401
   And the response displays an error message "<errormessage>"
   
   Examples:
   
     | bookingid | token        | errormessage  |
-    | 101       |              | unauthorized  |
-
+    | 101       |              | unauthorized  |    
+    
+    
+    
     
