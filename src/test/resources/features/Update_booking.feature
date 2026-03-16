@@ -22,8 +22,9 @@
        | 101       | abc123token  | Rahul      | Bose      | 9677121121901  | rahul@email.com  | 2026-03-15   | 2026-03-20 | true         |
        | 201       | xyz456token  | Bijoy      | Nambiar   | 9677121121902  | bijoy@email.com  | 2026-03-20   | 2026-03-25 | false        |
        
-     @negative @update @error
-      Scenario Outline: Unsuccessful update of existing booking due to invalid booking id
+    @negative @update @error
+     
+    Scenario Outline: Unsuccessful update of existing booking due to invalid booking id
     Given a confirmed booking already exists 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
@@ -34,8 +35,10 @@
        | bookingid | token        | errormessage    |  
        | !@#       | abc123token  | unauthorized    |
        | xyz       | xyz456token  | unauthorized    |
-       
-     Scenario Outline: Unsuccessful update of existing booking due to cancelled booking id
+
+    @negative @update  @error 
+    
+    Scenario Outline: Unsuccessful update of existing booking due to cancelled booking id
         
     Given the booking is already cancelled 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
@@ -64,7 +67,8 @@
        | 201       | 123456token  | unauthorized    |
     
     @negative @update @error
-      Scenario Outline: Unsuccessful update of existing booking due to expired token code
+    
+    Scenario Outline: Unsuccessful update of existing booking due to expired token code
   
     Given a confirmed booking already exists 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
@@ -77,7 +81,7 @@
        | 101       | !@#123token  | unauthorized    |
        | 201       | 123456token  | unauthorized    |
        
-     @negative @update @mandatory @error
+     @negative @update  @invalidParam @error
      
     Scenario Outline: Unsuccessful update of customer's booking details due to invalid inputs
   
@@ -97,7 +101,7 @@
      | 101       | abc123token | Will      | Smith    | @test.com     | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | email must be a well-formed email address     |
      | 101       | abc123token | Will      | Smith    | will@test.com | 9677121907    | false       | 2026-03-15 | 2026-03-20 | phonenumber size must be between 11 and 21    |
      | 101       | abc123token | Will      | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-15 | checkin and checkout date cannot be the same  |
-     | 101       | abc123token | Sam       | Mendis   | sam@test.com  | 9677121121908 | false       | 2026-03-21 | 2026-03-20 | Checkout date must be later than checkin      |            |
+     | 101       | abc123token | Sam       | Mendis   | sam@test.com  | 9677121121908 | false       | 2026-03-21 | 2026-03-20 | Checkout date must be later than checkin      | 
   
    
        
