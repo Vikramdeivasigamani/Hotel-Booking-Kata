@@ -13,10 +13,9 @@ Feature: Create hotel booking
 
   Scenario Outline: Successful booking of a hotel room with valid guest and stay details
   
-  Given a guest provides the following booking details:  
+  When the customer provides the following booking details:  
     | firstname   | lastname   | email   | phone   | depositpaid    | checkin   | checkout   |
     | <firstname> | <lastname> | <email> | <phone> | <depositpaid>  | <checkin> | <checkout> |
-  When the guest submits the booking
   Then the response status should be 200
   And an unique booking id is generated
   
@@ -33,13 +32,11 @@ Examples:
     Given a guest provides the following booking details
       | firstname   | lastname   | email   | phone   | depositpaid   | checkin   | checkout   |
       | <firstname> | <lastname> | <email> | <phone> | <depositpaid> | <checkin> | <checkout> |
-
-    When the guest submits the booking
     Then the response status should be 400
     And the response displays an error message "<errormessage>"
-    
-
-  Examples:
+    And booking id should not be generated
+   
+    Examples:
     | firstname | lastname | email         | phone        | depositpaid | checkin    | checkout   | errormessage                                 |
     | Wi       | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | firstname size must be between 3 and 18       |
     | Will     | Sm       | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-20 | lastname size must be between 3 and 18        |
@@ -49,8 +46,3 @@ Examples:
     | Sam      | Mendis   | sam@test.com  | 9677121121908 | true        | 2026-03-21 | 2026-03-20 | Failed to create booking                      |
   
    
-  
-  
-    
-    
-    
