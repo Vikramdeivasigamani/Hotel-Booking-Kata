@@ -8,7 +8,7 @@ Feature: Retrieve existing booking details
   Background:
   Given Given a confirmed booking exists with id "<bookingid>"   
    
-  @retrieve @positive
+  @retrieve @positive @mandatory
   Scenario Outline: Successful retrieval of booking details 
         
   When the client enter the booking reference "<bookingid>" "<token>"
@@ -20,7 +20,7 @@ Feature: Retrieve existing booking details
     | bookingid | token        |
     | 101       | abc123token  |
     
-    @retrieve @negative @bookingid
+    @retrieve @negative @error
     
    Scenario Outline: Unsuccessful retrieval of booking details due to invalid booking id but valid token
     
@@ -35,7 +35,7 @@ Feature: Retrieve existing booking details
     | !@#       | abc123token  | unauthorized  |
     | abc       | abc123token  | unauthorized  |
     
-   @retrieve @negative @token
+   @retrieve @negative  @error
    
    Scenario Outline: Unsuccessful retrieval of booking details due to valid booking id but invalid token
     
@@ -51,7 +51,7 @@ Feature: Retrieve existing booking details
     | 201       | abc201       | unauthorized  |
     | 301       | a$!@%6       | unauthorized  |
     
-     @retrieve @negative @missingtoken
+     @retrieve @negative @error
    
    Scenario Outline: Unsuccessful retrieval of booking details due to valid booking id but missing token
     
