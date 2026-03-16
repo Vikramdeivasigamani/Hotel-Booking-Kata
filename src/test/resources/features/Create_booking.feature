@@ -1,3 +1,4 @@
+@create 
 Feature: Create hotel booking
 
   As a customer
