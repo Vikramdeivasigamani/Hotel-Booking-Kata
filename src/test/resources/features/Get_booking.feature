@@ -39,7 +39,7 @@ Feature: Retrieve existing booking details
       |           | abc123token | unauthorized |
 
   @retrieve @negative @validation @invalid  @error
-  Scenario: Unsuccessful retrieval of booking details due to invalid booking Id
+  Scenario Outline: Unsuccessful retrieval of booking details due to invalid booking Id
     When the customer retrieves booking details using booking id "<bookingid>" and token code "<token>"
     Then the response status should be 401
     And the system displays an error message "<errormessage>"
