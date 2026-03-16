@@ -1,4 +1,11 @@
-d:
+@retrieve
+Feature: Retrieve existing booking details
+
+  As a customer
+  I want to view my existing booking details
+  So that I can confirm my reservation
+  
+  Background:
   Given Given a confirmed booking exists with id "<bookingid>"   
    
   @retrieve @positive
@@ -57,3 +64,5 @@ d:
   
     | bookingid | token        | errormessage  |
     | 101       |              | unauthorized  |
+
+    
