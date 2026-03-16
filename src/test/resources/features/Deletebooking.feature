@@ -89,7 +89,7 @@ Feature: Cancel booking
     Scenario Outline: Unsuccessful cancellation of an expired booking  
     
     Given a confirmed booking already exists
-    And the stay dated has passed
+    And the stay dates had passed
     When the customer cancels booking using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
