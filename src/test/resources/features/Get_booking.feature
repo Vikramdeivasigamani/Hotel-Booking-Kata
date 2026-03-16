@@ -11,7 +11,7 @@ Feature: Retrieve existing booking details
   @retrieve @positive @mandatory
   Scenario Outline: Successful retrieval of booking details 
         
-  When the client enter the booking reference "<bookingid>" "<token>"
+  When the customer retrieves booking details using booking id "<bookingid>" and token code "<token>"
   Then the response status should be 200
   And the system displays the booking details
   
@@ -20,11 +20,11 @@ Feature: Retrieve existing booking details
     | bookingid | token        |
     | 101       | abc123token  |
     
-   @retrieve @negative @validation
+   @retrieve @negative @validation @invalid  @error
     
    Scenario Outline: Unsuccessful retrieval of booking details due to invalid booking id but valid token
            
-  When the customer enter the booking reference "<bookingid>" "<token>"
+  When the customer retrieves booking details using booking id "<bookingid>" and token code "<token>"
   Then the response status should be 401
   And the system displays an error message "<errormessage>"
   
@@ -34,11 +34,11 @@ Feature: Retrieve existing booking details
     | !@#       | abc123token  | unauthorized  |
     | abc       | abc123token  | unauthorized  |
 
-   @retrieve @negative @validation
+@retrieve @negative @validation @invalid  @error
 
   Scenario Outline: Unsuccessful retrieval of booking details due to missing booking Id
 
-  When the customer enter the booking reference "<bookingid>" "<token>"
+  When the customer retrieves booking details using booking id "<bookingid>" and token code "<token>"
   Then the response status should be 401
   And the system displays an error message "<errormessage>"
   
@@ -47,9 +47,9 @@ Feature: Retrieve existing booking details
     | bookingid | token        | errormessage  |
     |           | abc123token  | unauthorized  |  
     
-   @retrieve @negative @validation
+ @retrieve @negative @validation @invalid  @error
    
-  When the customer enter the booking reference "<bookingid>" "<token>"
+  When the customer retrieves booking details using booking id "<bookingid>" and token code "<token>"
   Then the response status should be 401
   And the system displays an error message "<errormessage>"
   
@@ -60,11 +60,11 @@ Feature: Retrieve existing booking details
     | abc       | abc123token  | unauthorized  |
     
     
-   @retrieve @negative @validation
+   @retrieve @negative @validation @invalid  @error
    
    Scenario Outline: Unsuccessful retrieval of booking details due to valid booking id but invalid token
              
-  When the customer enter the booking reference "<bookingid>" "<token>"
+  When the customer retrieves booking details using booking id "<bookingid>" and token code "<token>"
   Then the response status should be 401
   And the system displays an error message "<errormessage>"
   
@@ -75,18 +75,16 @@ Feature: Retrieve existing booking details
     | 201       | abc201       | unauthorized  |
     | 301       | a$!@%6       | unauthorized  |
     
-     @retrieve @negative @validation
+     @retrieve @negative @validation @invalid  @error
    
    Scenario Outline: Unsuccessful retrieval of booking details due to valid booking id but missing token
                
-  When the customer enter the booking reference "<bookingid>" "<token>"
+  When the customer retrieves booking details using booking id "<bookingid>" and token code "<token>"
   Then the response status should be 401
   And the system displays an error message "<errormessage>"
   
   Examples:
   
     | bookingid | token        | errormessage  |
-    | 101       |              | unauthorized  |   
-    
-    
+    | 101       |              | unauthorized  |       
     
