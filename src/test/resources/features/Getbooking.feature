@@ -27,7 +27,7 @@ Feature: Retrieve existing booking details
            
   When the customer enter the booking reference "<bookingid>" "<token>"
   Then the response status should be 401
-  And the response displays an error message "<errormessage>"
+  And the system displays an error message "<errormessage>"
   
   Examples:
   
@@ -42,7 +42,7 @@ Feature: Retrieve existing booking details
            
   When the customer enter the booking reference "<bookingid>" "<token>"
   Then the response status should be 401
-  And the response displays an error message "<errormessage>"
+  And the system displays an error message "<errormessage>"
   
   Examples:
   
@@ -58,12 +58,12 @@ Feature: Retrieve existing booking details
            
   When the customer enter the booking reference "<bookingid>" "<token>"
   Then the response status should be 401
-  And the response displays an error message "<errormessage>"
+  And the system displays an error message "<errormessage>"
   
   Examples:
   
     | bookingid | token        | errormessage  |
-    | 101       |              | unauthorized  |    
+    | 101       |              | unauthorized  |  
     
     
     
