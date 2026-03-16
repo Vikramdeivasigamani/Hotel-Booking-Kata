@@ -10,7 +10,7 @@ Feature: Cancel booking
     Scenario Outline: Successful cancellation of an existing booking
     
     Given a confirmed booking already exists
-    When the customer attempts to cancel booking using booking id "<bookingid>" and token code "<token>" 
+    When the customer cancels booking using booking id "<bookingid>" and token code "<token>" 
     Then the response status code should be 201
     And the system cancels the booking
     And the room becomes available for the cancelled dates
@@ -22,12 +22,12 @@ Feature: Cancel booking
        | 201       | xyz456token  |
    
    
-   @delete @negative @authentication @error
+   @delete @negative @validation @error
    
-   Scenario: Unsuccessful cancellation due to invalid booking id
+   Scenario Outline: Unsuccessful cancellation due to invalid booking id
    
     Given a confirmed booking already exists
-    When the customer attempts to cancel booking using booking id "<bookingid>" and token code "<token>"  
+    When the customer cancels booking using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
          
@@ -37,7 +37,7 @@ Feature: Cancel booking
        | !@#       | abc123token  | unauthorized    |
        |           | vik123token  | unauthorized    |
        
-     @delete @negative @authentication @error 
+     @delete @negative @validation @error 
      
     Scenario Outline: Unsuccessful cancellation due to invalid token code
     
@@ -58,7 +58,7 @@ Feature: Cancel booking
    Scenario Outline: Unsuccessful cancellation of an already cancelled booking 
    
     Given the booking is already cancelled
-    When the customer attempts to cancel booking using booking id "<bookingid>" and token code "<token>"  
+    When the customer cancels booking using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
     
@@ -73,7 +73,7 @@ Feature: Cancel booking
     
     Given a confirmed booking already exists
     And the check-in date has passed and check-out date is in the future
-    When the customer attempts to cancel booking using booking id "<bookingid>" and token code "<token>"  
+    When the customer cancels booking using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
     And no changes made to the existing booking
@@ -90,7 +90,7 @@ Feature: Cancel booking
     
     Given a confirmed booking already exists
     And the stay dated has passed
-    When the customer attempts to cancel booking details using booking id "<bookingid>" and token code "<token>"  
+    When the customer cancels booking using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
     
