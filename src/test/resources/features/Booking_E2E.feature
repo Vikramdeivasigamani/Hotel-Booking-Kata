@@ -7,7 +7,7 @@ Feature: Hotel booking End to End flow
   So that I can manage reservations successfully
 
 
-  @create @positive @mandatory
+  @create @positive @mandatory @validation
   
    Scenario Outline: Successfully create a hotel booking 
    
@@ -25,7 +25,7 @@ Feature: Hotel booking End to End flow
   | Sam       | Mendis     | sam@test.com  | 9677121121908 | false        | 2026-03-17 | 2026-03-20 |
  
  
-  @retrieve @positive @mandatory
+  @retrieve @positive @validation
   
   Scenario Outline: Successfully retrieve an existing booking  
 
@@ -40,7 +40,7 @@ Feature: Hotel booking End to End flow
     | 101       | abc123token  |
     
     
-    @update  @positive @mandatory
+    @update  @positive @validation
     
      Scenario Outline: Successfully update an existing booking 
      
@@ -58,7 +58,7 @@ Feature: Hotel booking End to End flow
        | 201       | xyz456token  | Sam        | Mendis    | 9677121121910  | smith@email.com  | 2026-03-18   | 2026-03-25 | false        |
        
      
-    @delete @positive @mandatory
+    @delete @positive @validation
   
     Scenario Outline: Successfully cancel an existing booking 
     
@@ -75,7 +75,7 @@ Feature: Hotel booking End to End flow
        | 201       | xyz456token  |
        
        
-        @delete @negative 
+        @delete @negative @validation @error
   
     Scenario Outline: Unsuccessful retreival of cancelled booking           
        
