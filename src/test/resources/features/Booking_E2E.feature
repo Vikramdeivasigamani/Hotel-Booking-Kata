@@ -20,7 +20,7 @@ Feature: Hotel booking End to End flow
       | Sam       | Mendis   | sam@test.com  | 9677121121908 | false       | 2026-03-17 | 2026-03-20 |
 
   @retrieve @positive @validation
-  Scenario Outline: Successfully retrieve an existing booking
+  Scenario: Successfully retrieve an existing booking
     Given a confirmed booking already exists
     When the customer enter the booking reference "<bookingid>" "<token>"
     Then the response status should be 200
@@ -58,7 +58,7 @@ Feature: Hotel booking End to End flow
       | 201       | xyz456token |
 
   @delete @negative @validation @error
-  Scenario Outline: Unsuccessful retreival of cancelled booking
+  Scenario: Unsuccessful retreival of cancelled booking
     Given the booking is already cancelled
     When the customer attempts to retrieve the booking using booking id "<bookingid>" and token code "<token>"
     Then the response status code should be 401
