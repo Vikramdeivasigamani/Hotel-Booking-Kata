@@ -8,73 +8,8 @@
   Background:
     Given a confirmed booking already exists 
 
-  @positive @update
-  
-  Scenario Outline: Successfully update the customer's first name
-  
-    When the customer updates the first name "<firstname>" using booking id "<bookingid>" and token code "<token>"  
-    Then the response status code should be 200
-    And the booking details are updated with first name "<firstname>" 
- 
-    Examples:
-    
-       | bookingid | token        | firstname  |
-       | 101       | abc123token  | Rahul      |
-       | 201       | xyz456token  | Bijoy      | 
-       
-    @positive @update     
-  Scenario Outline: Successfully update the customer's Last name
-  
-    When the customer updates the last name "<lastname>" using booking id "<bookingid>" and token code "<token>"  
-    Then the response status code should be 200
-    And the booking details are updated with last name "<lastname>" 
- 
-    Examples:
-    
-       | bookingid | token        | lastname   |
-       | 101       | abc123token  | Bose       |
-       | 201       | xyz456token  | Nambiar    | 
-       
-     @positive @update              
-  Scenario Outline: Successfully update the customer's phone number
-  
-    When the customer updates the phone number "<phone>" using booking id "<bookingid>" and token code "<token>"  
-    Then the response status code should be 200
-    And the booking details are updated with phone number "<phone>" 
- 
-    Examples:
-    
-       | bookingid | token        | phone          |
-       | 101       | abc123token  | 9677121121901  |
-       | 201       | xyz456token  | 9677121121902  | 
-       
-    @positive @update   
-   Scenario Outline: Successfully update the customer's email
-  
-    When the customer updates the email "<email>" using booking id "<bookingid>" and token code "<token>"  
-    Then the response status code should be 200
-    And the booking details are updated with email "<email>" 
- 
-    Examples:
-    
-       | bookingid | token        | email            |
-       | 101       | abc123token  | rahul@email.com   |
-       | 201       | xyz456token  | bijoy@email.com   |   
-       
      @positive @update  
-     Scenario Outline: Successfully update the customer's stay dates
-  
-    When the customer updates the check-in "<checkin>" and check-out "<checkout>" dates using booking id "<bookingid>" and token code "<token>"  
-    Then the response status code should be 200
-    And the booking details are updated with "<checkin>" and check-out "<checkout>" dates
- 
-    Examples:
-    
-       | bookingid | token        | checkin      | checkout   |
-       | 101       | abc123token  | 2026-03-15   | 2026-03-20 |
-       | 201       | xyz456token  | 2026-03-20   | 2026-03-25 |  
-    
-    @positive @update
+
      Scenario Outline: Successfully update the customer's booking details
   
     When the customer updates the booking details with the following details  using booking id "<bookingid>" and token code "<token>"  
@@ -103,7 +38,8 @@
        | xyz       | xyz456token  | unauthorized    |
        
         Scenario Outline: Unsuccessful update of existing booking due to cancelled booking id
-  
+        
+    Given the booking is already cancelled 
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
     And the response displays an error message "<errormessage>"
@@ -161,6 +97,9 @@
      | 101       | abc123token | Sam       | Mendis   | sam@test.com  | 9677121121908 | false       | 2026-03-21 | 2026-03-20 | Checkout date must be later than checkin      |            |
   
    
+       
+       
+       
        
        
     
