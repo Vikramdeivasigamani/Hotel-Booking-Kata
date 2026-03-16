@@ -94,6 +94,7 @@
   
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
+    And the response displays an error message "<errormessage>"
      
     Examples: 
    
@@ -105,6 +106,7 @@
   
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
+    And the response displays an error message "<errormessage>"
      
     Examples: 
    
@@ -117,7 +119,7 @@
   
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
-    And no changes made to the existing booking details
+    And the response displays an error message "<errormessage>"
      
     Examples: 
    
@@ -130,7 +132,7 @@
   
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
     Then the response status code should be 401
-    And no changes made to the existing booking details
+    And the response displays an error message "<errormessage>"
     
     Examples: 
    
@@ -145,6 +147,7 @@
      | firstname   | lastname    | phone      | email       | checkin    | checkout   |
      | <firstname> | <lastname>  | <phone>    | <email>     | <checkin>  | <checkout> |
     Then the response status code should be 401
+    And the response displays an error message "<errormessage>"
     And no changes made to the existing booking details
  
     Examples:
@@ -156,8 +159,10 @@
      | 101       | abc123token | Will      | Smith    | will@test.com | 9677121907    | false       | 2026-03-15 | 2026-03-20 | phonenumber size must be between 11 and 21    |
      | 101       | abc123token | Will      | Smith    | will@test.com | 9677121121907 | true        | 2026-03-15 | 2026-03-15 | checkin and checkout date cannot be the same  |
      | 101       | abc123token | Sam       | Mendis   | sam@test.com  | 9677121121908 | false       | 2026-03-21 | 2026-03-20 | Checkout date must be later than checkin      |            |
-    
-        
+  
+  
+       
+       
        
     
 
