@@ -9,7 +9,7 @@ Feature: Create hotel booking
  
   Given the hotel booking system is available
 
-@positive @validation
+@positive @validation @mandatory
 
   Scenario Outline: Successful booking of a hotel room with valid guest and stay details
   
@@ -26,7 +26,7 @@ Examples:
   | Sam       | Mendis     | sam@test.com  | 9677121121908 | false        | 2026-03-17 | 2026-03-20 |
   
   
-   @negative @validation
+   @negative @validation @error @mandatory
      
   Scenario Outline: Unsuccessful booking of a hotel room due to invalid booking details
 
