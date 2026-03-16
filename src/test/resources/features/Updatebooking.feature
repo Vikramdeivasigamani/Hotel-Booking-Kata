@@ -8,7 +8,7 @@
   Background:
     Given a confirmed booking already exists 
 
-     @positive @update  
+     @positive @update @mandatory
 
      Scenario Outline: Successfully update the customer's booking details
   
@@ -24,7 +24,7 @@
        | 101       | abc123token  | Rahul      | Bose      | 9677121121901  | rahul@email.com  | 2026-03-15   | 2026-03-20 | true         |
        | 201       | xyz456token  | Bijoy      | Nambiar   | 9677121121902  | bijoy@email.com  | 2026-03-20   | 2026-03-25 | false        |
        
-     @negative @update
+     @negative @update @error
       Scenario Outline: Unsuccessful update of existing booking due to invalid booking id
   
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
@@ -50,7 +50,7 @@
        | 111       | abc123token  | unauthorized    |
        | 222       | xyz456token  | unauthorized    |
     
-    @negative @update  
+    @negative @update  @error 
        Scenario Outline: Unsuccessful update of existing booking due to invalid token code
   
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
@@ -63,7 +63,7 @@
        | 101       | !@#123token  | unauthorized    |
        | 201       | 123456token  | unauthorized    |
     
-    @negative @update
+    @negative @update @error
       Scenario Outline: Unsuccessful update of existing booking due to expired token code
   
     When the customer attempts to update booking details using booking id "<bookingid>" and token code "<token>"  
@@ -76,7 +76,7 @@
        | 101       | !@#123token  | unauthorized    |
        | 201       | 123456token  | unauthorized    |
        
-     @negative @update  
+     @negative @update @mandatory @error
       Scenario Outline: Unsuccessful update of customer's booking details due to invalid inputs
   
     When the customer updates the booking details with the following details using booking id "<bookingid>" and token code "<token>"  
